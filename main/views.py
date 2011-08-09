@@ -4,9 +4,12 @@ import django.contrib.gis.geos as geos
 from vectorformats.Formats import Django, GeoJSON
 from main.models import Data
 from django.views.decorators.csrf import csrf_exempt
-
+from django.shortcuts import render_to_response
 
 import json
+
+def ui(request):
+    return render_to_response("ui.html")
 
 def serialize(features):
     djf = Django.Django(geodjango="geometry", properties=['title', 'description']) 
@@ -20,6 +23,7 @@ def apply(obj, feature):
     obj.geometry = geom
     for key, value in feature.properties.items():
         setattr(obj, key, value)
+    obj.save()    
     return obj
 
 @csrf_exempt

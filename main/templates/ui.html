@@ -1,0 +1,54 @@
+<html>
+<head>
+<script src="http://openlayers.org/api/OpenLayers.js"></script>
+<script>
+    currentFeature = null;
+    function init() {
+        var map = new OpenLayers.Map("map");
+        map.addLayer(new OpenLayers.Layer("Base", {isBaseLayer: true}));
+        layer = new OpenLayers.Layer.Vector("GML", {
+            strategies: [new OpenLayers.Strategy.Fixed(), new OpenLayers.Strategy.Save()],
+            protocol: new OpenLayers.Protocol.HTTP({
+                url: "/data",
+                format: new OpenLayers.Format.GeoJSON()
+            })
+        });    
+        map.zoomToMaxExtent();
+        map.addLayer(layer);
+        map.addControl(new OpenLayers.Control.EditingToolbar(layer));
+        layer.events.register('loadend', layer, register);
+    }
+    function register() {
+        this.events.register('featureadded', this, added);
+        this.events.unregister('loadend', layer, register);
+    }
+    function added(evt) {
+        if (currentFeature) {
+            layer.removeFeatures(currentFeature);
+        }    
+        currentFeature = evt.feature;
+        document.forms['details'].title.value = "";
+        document.forms['details'].description.value = "";
+        document.getElementById("details").style.display = "";
+    }
+    function save() {
+        currentFeature.attributes.title = document.forms['details'].title.value;
+        currentFeature.attributes.description = document.forms['details'].description.value;
+        layer.strategies[1].save([currentFeature]);
+        document.getElementById("details").style.display = "none";
+        currentFeature = null;
+    }
+</script>
+</head>
+<body onload="init()">
+<div id="details" style="float:right; width: 300px; display:none;">
+  <form name="details" onsubmit="save(); return false">
+    Title: <input type="text" value="" name="title" /><br />
+    Description:<br />
+    <textarea name="description"></textarea>
+    <input type="submit" value="Save" />
+  </form>
+</div>
+<div id="map" style="width: 512px; height: 512px"></div>
+</body>
+</html>
