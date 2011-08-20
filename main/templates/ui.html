@@ -1,48 +1,97 @@
 <html>
 <head>
-<script src="http://openlayers.org/api/OpenLayers.js"></script>
+<script src="http://localhost/openlayers/OpenLayers.js"></script>
+<link rel="stylesheet" href="/static/css/style.css" />
 <script>
+    LAYER_CONFIG = {
+        'data': {
+            'title': 'Base Data',
+            'form': 'data_form',
+            'type': 'Point'
+        },
+        'other': {
+            'title': "Other",
+            'form': 'other_form',
+            'type': 'Polygon'
+        }    
+    };    
     currentFeature = null;
     function init() {
-        var map = new OpenLayers.Map("map");
+        var map = new OpenLayers.Map("map", {'theme': null});
         map.addLayer(new OpenLayers.Layer("Base", {isBaseLayer: true}));
-        layer = new OpenLayers.Layer.Vector("GML", {
-            strategies: [new OpenLayers.Strategy.Fixed(), new OpenLayers.Strategy.Save()],
-            protocol: new OpenLayers.Protocol.HTTP({
-                url: "/data/data",
-                format: new OpenLayers.Format.GeoJSON()
-            })
-        });    
         map.zoomToMaxExtent();
-        map.addLayer(layer);
-        map.addControl(new OpenLayers.Control.EditingToolbar(layer));
-        layer.events.register('loadend', layer, register);
+        for (var key in LAYER_CONFIG) {
+            var layer_info = LAYER_CONFIG[key];
+
+            var layer = new OpenLayers.Layer.Vector(layer_info['title'], {
+                strategies: [new OpenLayers.Strategy.Fixed(), new OpenLayers.Strategy.Save()],
+                protocol: new OpenLayers.Protocol.HTTP({
+                    url: "/data/"+key,
+                    format: new OpenLayers.Format.GeoJSON()
+                }),
+                layerKey: key
+            }); 
+            LAYER_CONFIG[key].layer = layer;
+            map.addLayer(layer);
+            layer.events.register('loadend', layer, register);
+        }
+        MyToolbar = OpenLayers.Class(OpenLayers.Control.Panel, {
+            initialize: function(options) {
+                OpenLayers.Control.Panel.prototype.initialize.apply(this, [options]);
+                this.addControls( [ new OpenLayers.Control.Navigation() ]);
+                for (var layer in LAYER_CONFIG) {
+                    var info = LAYER_CONFIG[layer];
+                    this.addControls( [
+                        new OpenLayers.Control.DrawFeature(info.layer, OpenLayers.Handler[info.type], {'displayClass': 'olControlDrawFeature'+info.type, 'title': LAYER_CONFIG[layer].title})
+                    ])
+                    this.displayClass = 'myToolbar';
+                }
+            },
+            CLASS_NAME: 'MyToolbar'
+        });
+        var toolbar = new MyToolbar();
+        map.addControl(new MyToolbar());
+
     }
     function register() {
         this.events.register('featureadded', this, added);
-        this.events.unregister('loadend', layer, register);
+        this.events.unregister('loadend', this, register);
     }
     function added(evt) {
         if (currentFeature) {
-            layer.removeFeatures(currentFeature);
+            currentFeature.layer.removeFeatures(currentFeature);
         }    
         currentFeature = evt.feature;
-        document.forms['details'].title.value = "";
-        document.forms['details'].description.value = "";
-        document.getElementById("details").style.display = "";
+        var form = LAYER_CONFIG[this.layerKey].form;
+        document.forms[form].title.value = "";
+        document.forms[form].description.value = "";
+        for (var key in LAYER_CONFIG) {
+            document.getElementById(LAYER_CONFIG[key].form).parentNode.style.display = "none";
+        }    
+        document.getElementById(form).parentNode.style.display = "";
     }
     function save() {
-        currentFeature.attributes.title = document.forms['details'].title.value;
-        currentFeature.attributes.description = document.forms['details'].description.value;
-        layer.strategies[1].save([currentFeature]);
-        document.getElementById("details").style.display = "none";
+        var layer = currentFeature.layer.layerKey;
+        var form = LAYER_CONFIG[layer].form;
+        currentFeature.attributes.title = document.forms[form].title.value;
+        currentFeature.attributes.description = document.forms[form].description.value;
+        currentFeature.layer.strategies[1].save([currentFeature]);
+        document.getElementById(form).parentNode.style.display = "none";
         currentFeature = null;
     }
 </script>
 </head>
 <body onload="init()">
 <div id="details" style="float:right; width: 300px; display:none;">
-  <form name="details" onsubmit="save(); return false">
+  <form id="data_form" name="data_form" onsubmit="save(); return false">
+    Title: <input type="text" value="" name="title" /><br />
+    Description:<br />
+    <textarea name="description"></textarea>
+    <input type="submit" value="Save" />
+  </form>
+</div>
+<div id="other_details" style="float:right; width: 300px; display:none;">
+  <form id="other_form" name="other_form" onsubmit="save(); return false">
     Title: <input type="text" value="" name="title" /><br />
     Description:<br />
     <textarea name="description"></textarea>

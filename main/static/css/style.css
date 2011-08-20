@@ -1,0 +1,44 @@
+.myToolbar {
+    margin: 5px 5px 0 0;
+}
+.myToolbar div {
+    background-image: url("img/editing_tool_bar.png");
+    background-repeat: no-repeat;
+    margin: 0 0 5px 5px;
+    width: 24px;
+    height: 22px;
+    cursor: pointer
+}
+/* positions */
+.myToolbar {
+    right: 0;
+    top: 0;
+}
+.myToolbar div {
+    float: right;
+}
+/* individual controls */
+.myToolbar .olControlNavigationItemInactive {
+    background-position: -103px -1px;
+}
+.myToolbar .olControlNavigationItemActive {
+    background-position: -103px -24px;
+}
+.myToolbar .olControlDrawFeaturePointItemInactive {
+    background-position: -77px -1px;
+}
+.myToolbar .olControlDrawFeaturePointItemActive {
+    background-position: -77px -24px;
+}
+.myToolbar .olControlDrawFeaturePathItemInactive {
+    background-position: -51px -1px;
+}
+.myToolbar .olControlDrawFeaturePathItemActive {
+    background-position: -51px -24px;
+}
+.myToolbar .olControlDrawFeaturePolygonItemInactive{
+    background-position: -26px -1px;
+}
+.myToolbar .olControlDrawFeaturePolygonItemActive {
+    background-position: -26px -24px;
+}

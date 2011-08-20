@@ -7,3 +7,9 @@ class Data(models.Model):
     description = models.TextField(blank=True)
     geometry = models.GeometryField(srid=4326)
     objects = models.GeoManager()
+
+class Other(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    geometry = models.GeometryField(srid=4326)
+    objects = models.GeoManager()

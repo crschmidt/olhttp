@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 import django.contrib.gis.geos as geos
 from vectorformats.Formats import Django, GeoJSON
-from main.models import Data
+from main.models import Data, Other
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 
@@ -11,6 +11,10 @@ import json
 MODELS = {
     'data': {
         'modelclass': Data,
+        'fields': ['title', 'description']
+    },
+    'other': {
+        'modelclass': Other,
         'fields': ['title', 'description']
     }
 }    
