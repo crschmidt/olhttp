@@ -9,7 +9,7 @@
         layer = new OpenLayers.Layer.Vector("GML", {
             strategies: [new OpenLayers.Strategy.Fixed(), new OpenLayers.Strategy.Save()],
             protocol: new OpenLayers.Protocol.HTTP({
-                url: "/data",
+                url: "/data/data",
                 format: new OpenLayers.Format.GeoJSON()
             })
         });    
