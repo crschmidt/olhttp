@@ -65,6 +65,7 @@
         var form = LAYER_CONFIG[this.layerKey].form;
         var formdom = document.forms[form];
         for (var i = 0; i < formdom.length; i++) {
+            if (formdom[i].type == "submit") {continue;}
             formdom[i].value = "";
         }
         for (var key in LAYER_CONFIG) {
@@ -77,6 +78,7 @@
         var form = LAYER_CONFIG[layer].form;
         var formdom = document.forms[form];
         for (var i = 0; i < formdom.length; i++) {
+            if (formdom[i].type == "submit") {continue;}
             currentFeature.attributes[formdom[i].name] = formdom[i].value;
         }
         currentFeature.layer.strategies[1].save([currentFeature]);
