@@ -6,18 +6,12 @@
 <link rel="stylesheet" href="/static/css/style.css" />
 <script>
     LAYER_CONFIG = {
-        'data': {
-            'title': 'Base Data',
-            'form': 'data_form',
-            'type': 'Point',
-	    'multi': true
-        },
-        'other': {
-            'title': "Other",
-            'form': 'other_form',
+        'properties': {
+            'title': 'Properties',
+            'form': 'properties_form',
             'type': 'Polygon',
-            'multi': false
-        }    
+	    'multi': true
+        }
     };    
     currentFeature = null;
     var map = null;
@@ -106,10 +100,8 @@
 </head>
 <body onload="init()">
 <div id="details" style="float:right; width: 300px; display:none;">
-  <form id="data_form" name="data_form" onsubmit="save(); return false">
+  <form id="properties_form" name="properties_form" onsubmit="save(); return false">
     Title: <input type="text" value="" name="title" /><br />
-    Description:<br />
-    <textarea name="description"></textarea>
     <input type="submit" value="Save" />
   </form>
 </div>

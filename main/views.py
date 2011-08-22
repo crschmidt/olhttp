@@ -2,20 +2,16 @@
 from django.http import HttpResponse
 import django.contrib.gis.geos as geos
 from vectorformats.Formats import Django, GeoJSON
-from main.models import Data, Other
+from main.models import Properties
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 
 import json
 
 MODELS = {
-    'data': {
-        'modelclass': Data,
-        'fields': ['title', 'description']
-    },
-    'other': {
-        'modelclass': Other,
-        'fields': ['title', 'description']
+    'properties': {
+        'modelclass': Properties,
+        'fields': ['name']
     }
 }    
 
@@ -25,7 +21,7 @@ def ui(request):
 def serialize(features, properties=None):
     if not properties:
         properties = ['title', 'description']
-    djf = Django.Django(geodjango="geometry", properties=properties) 
+    djf = Django.Django(geodjango="the_geom", properties=properties) 
     geoj = GeoJSON.GeoJSON()
     jsonstring = geoj.encode(djf.decode(features))
     return jsonstring
