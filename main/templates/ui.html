@@ -63,8 +63,10 @@
         }    
         currentFeature = evt.feature;
         var form = LAYER_CONFIG[this.layerKey].form;
-        document.forms[form].title.value = "";
-        document.forms[form].description.value = "";
+        var formdom = document.forms[form];
+        for (var i = 0; i < formdom.length; i++) {
+            formdom[i].value = "";
+        }
         for (var key in LAYER_CONFIG) {
             document.getElementById(LAYER_CONFIG[key].form).parentNode.style.display = "none";
         }    
@@ -73,8 +75,10 @@
     function save() {
         var layer = currentFeature.layer.layerKey;
         var form = LAYER_CONFIG[layer].form;
-        currentFeature.attributes.title = document.forms[form].title.value;
-        currentFeature.attributes.description = document.forms[form].description.value;
+        var formdom = document.forms[form];
+        for (var i = 0; i < formdom.length; i++) {
+            currentFeature.attributes[formdom[i].name] = formdom[i].value;
+        }
         currentFeature.layer.strategies[1].save([currentFeature]);
         document.getElementById(form).parentNode.style.display = "none";
         currentFeature = null;
