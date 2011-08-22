@@ -18,8 +18,9 @@
         }    
     };    
     currentFeature = null;
+    var map = null;
     function init() {
-        var map = new OpenLayers.Map("map", {'theme': null});
+        map = new OpenLayers.Map("map", {'theme': null});
         var gmap = new OpenLayers.Layer.GoogleNG(
                 // ROADMAP, the default
                     );
@@ -84,6 +85,23 @@
         document.getElementById(form).parentNode.style.display = "none";
         currentFeature = null;
     }
+    function geocode(form) {
+        var text = form.search_text.value;
+        var geocoder = new google.maps.Geocoder(); 
+        geocoder.geocode( {'address': text }, function(results, status) {
+            if (results.length) {
+                result = results[0];
+                var ne = result.geometry.bounds.getNorthEast();
+                var sw = result.geometry.bounds.getSouthWest();
+                var bounds = [sw.lng(), sw.lat(), ne.lng(), ne.lat()];
+                var bounds = OpenLayers.Bounds.fromArray(bounds);
+                map.zoomToExtent(bounds.transform(
+                    new OpenLayers.Projection("EPSG:4326"),
+                    new OpenLayers.Projection("EPSG:900913")
+                ));
+            }
+        });
+    }
 </script>
 </head>
 <body onload="init()">
@@ -103,6 +121,11 @@
     <input type="submit" value="Save" />
   </form>
 </div>
-<div id="map" style="width: 512px; height: 512px"></div>
+<div id="map" style="width: 512px; height: 512px"></div><br />
+<div id="geocoder">
+<form name="geocoder" onsubmit="geocode(this); return false">
+<input type="text" name="search_text" value="San Francisco" />
+<input type="submit" value="Geocode" />
+</form>
 </body>
 </html>
