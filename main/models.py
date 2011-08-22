@@ -3,7 +3,7 @@ from django.contrib.gis.db import models
 # Create your models here.
 
 class Properties(models.Model):
-    gid = models.IntegerField(primary_key=True)
+    gid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
     number = models.FloatField()
     owner = models.CharField(max_length=50)

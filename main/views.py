@@ -33,11 +33,11 @@ def apply(obj, feature):
         geoms = []
         for item in feature.geometry['coordinates']:
             geoms.append(geomcls(*item))
-        geom = getattr(geos,feateature.geometry['type'])(geoms)    
+        geom = getattr(geos, feature.geometry['type'])(geoms)    
     else:
         geomcls = getattr(geos, feature.geometry['type'])
         geom = geomcls(*feature.geometry['coordinates'])
-    obj.geometry = geom
+    obj.the_geom = geom
     for key, value in feature.properties.items():
         setattr(obj, key, value)
     obj.save()    
