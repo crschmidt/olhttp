@@ -19,11 +19,20 @@
     };    
     currentFeature = null;
     var map = null;
+    function featureSelected(evt) {
+        var type = evt.feature.layer.name;
+        var html = '<b>'+type+'</b><ul>';
+        for (var key in evt.feature.attributes) {
+            html += '<li><b>'+ key + '</b>: ' + evt.feature.attributes[key]+"</li>";
+        }
+        document.getElementById("featuredetails").innerHTML = html;
+    }
     function init() {
         map = new OpenLayers.Map("map", {'theme': null});
         var gmap = new OpenLayers.Layer.GoogleNG({type: google.maps.MapTypeId.HYBRID});
         map.addLayer(gmap);
         map.zoomToMaxExtent();
+        var layers = [];
         for (var key in LAYER_CONFIG) {
             var layer_info = LAYER_CONFIG[key];
 
@@ -38,11 +47,14 @@
             LAYER_CONFIG[key].layer = layer;
             map.addLayer(layer);
             layer.events.register('loadend', layer, register);
+            layer.events.register('featureselected', null, featureSelected);
+            layers.push(layer);
         }
         MyToolbar = OpenLayers.Class(OpenLayers.Control.Panel, {
             initialize: function(options) {
                 OpenLayers.Control.Panel.prototype.initialize.apply(this, [options]);
-                this.addControls( [ new OpenLayers.Control.Navigation() ]);
+                this.defaultControl = new OpenLayers.Control.SelectFeature(layers, {displayClass: 'olControlNavigation'});
+                this.addControls( [this.defaultControl]);
                 for (var layer in LAYER_CONFIG) {
                     var info = LAYER_CONFIG[layer];
                     this.addControls( [
@@ -55,7 +67,6 @@
         });
         var toolbar = new MyToolbar();
         map.addControl(new MyToolbar());
-
     }
     function register() {
         this.events.register('featureadded', this, added);
@@ -64,11 +75,13 @@
     function added(evt) {
         if (currentFeature) {
             currentFeature.layer.removeFeatures(currentFeature);
-        }    
+        }   
+        
         currentFeature = evt.feature;
         var form = LAYER_CONFIG[this.layerKey].form;
         var formdom = document.forms[form];
         for (var i = 0; i < formdom.length; i++) {
+            if (formdom[i].type == "submit") {continue;}
             formdom[i].value = "";
         }
         for (var key in LAYER_CONFIG) {
@@ -81,6 +94,7 @@
         var form = LAYER_CONFIG[layer].form;
         var formdom = document.forms[form];
         for (var i = 0; i < formdom.length; i++) {
+            if (formdom[i].type == "submit") {continue;}
             currentFeature.attributes[formdom[i].name] = formdom[i].value;
         }
         currentFeature.layer.strategies[1].save([currentFeature]);
@@ -107,6 +121,8 @@
 </script>
 </head>
 <body onload="init()">
+<div id="featuredetails" style="float:right; width: 300px">
+</div>
 <div id="details" style="float:right; width: 300px; display:none;">
   <form id="data_form" name="data_form" onsubmit="save(); return false">
     Title: <input type="text" value="" name="title" /><br />
