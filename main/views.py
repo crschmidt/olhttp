@@ -31,8 +31,16 @@ def serialize(features, properties=None):
     return jsonstring
 
 def apply(obj, feature):
-    geomcls = getattr(geos, feature.geometry['type'])
-    geom = geomcls(*feature.geometry['coordinates'])
+    type = feature.geometry['type']
+    if type.startswith("Multi"):
+        geomcls = getattr(geos, feature.geometry['type'].replace("Multi", ""))
+        geoms = []
+        for item in feature.geometry['coordinates']:
+            geoms.append(geomcls(*item))
+        geom = getattr(geos,feateature.geometry['type'])(geoms)    
+    else:
+        geomcls = getattr(geos, feature.geometry['type'])
+        geom = geomcls(*feature.geometry['coordinates'])
     obj.geometry = geom
     for key, value in feature.properties.items():
         setattr(obj, key, value)
