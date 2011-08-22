@@ -9,12 +9,14 @@
         'data': {
             'title': 'Base Data',
             'form': 'data_form',
-            'type': 'Point'
+            'type': 'Point',
+	    'multi': true
         },
         'other': {
             'title': "Other",
             'form': 'other_form',
-            'type': 'Polygon'
+            'type': 'Polygon',
+            'multi': false
         }    
     };    
     currentFeature = null;
@@ -46,7 +48,7 @@
                 for (var layer in LAYER_CONFIG) {
                     var info = LAYER_CONFIG[layer];
                     this.addControls( [
-                        new OpenLayers.Control.DrawFeature(info.layer, OpenLayers.Handler[info.type], {'displayClass': 'olControlDrawFeature'+info.type, 'title': LAYER_CONFIG[layer].title})
+                        new OpenLayers.Control.DrawFeature(info.layer, OpenLayers.Handler[info.type], {'displayClass': 'olControlDrawFeature'+info.type, 'title': LAYER_CONFIG[layer].title, multi: info.multi || false})
                     ])
                     this.displayClass = 'myToolbar';
                 }
