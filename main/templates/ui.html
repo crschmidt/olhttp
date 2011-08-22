@@ -16,10 +16,19 @@
         }    
     };    
     currentFeature = null;
+    function featureSelected(evt) {
+        var type = evt.feature.layer.name;
+        var html = '<b>'+type+'</b><ul>';
+        for (var key in evt.feature.attributes) {
+            html += '<li><b>'+ key + '</b>: ' + evt.feature.attributes[key]+"</li>";
+        }
+        document.getElementById("featuredetails").innerHTML = html;
+    }
     function init() {
         var map = new OpenLayers.Map("map", {'theme': null});
         map.addLayer(new OpenLayers.Layer("Base", {isBaseLayer: true}));
         map.zoomToMaxExtent();
+        var layers = [];
         for (var key in LAYER_CONFIG) {
             var layer_info = LAYER_CONFIG[key];
 
@@ -34,11 +43,14 @@
             LAYER_CONFIG[key].layer = layer;
             map.addLayer(layer);
             layer.events.register('loadend', layer, register);
+            layer.events.register('featureselected', null, featureSelected);
+            layers.push(layer);
         }
         MyToolbar = OpenLayers.Class(OpenLayers.Control.Panel, {
             initialize: function(options) {
                 OpenLayers.Control.Panel.prototype.initialize.apply(this, [options]);
-                this.addControls( [ new OpenLayers.Control.Navigation() ]);
+                this.defaultControl = new OpenLayers.Control.SelectFeature(layers, {displayClass: 'olControlNavigation'});
+                this.addControls( [this.defaultControl]);
                 for (var layer in LAYER_CONFIG) {
                     var info = LAYER_CONFIG[layer];
                     this.addControls( [
@@ -51,7 +63,6 @@
         });
         var toolbar = new MyToolbar();
         map.addControl(new MyToolbar());
-
     }
     function register() {
         this.events.register('featureadded', this, added);
@@ -60,7 +71,8 @@
     function added(evt) {
         if (currentFeature) {
             currentFeature.layer.removeFeatures(currentFeature);
-        }    
+        }   
+        
         currentFeature = evt.feature;
         var form = LAYER_CONFIG[this.layerKey].form;
         var formdom = document.forms[form];
@@ -88,6 +100,8 @@
 </script>
 </head>
 <body onload="init()">
+<div id="featuredetails" style="float:right; width: 300px">
+</div>
 <div id="details" style="float:right; width: 300px; display:none;">
   <form id="data_form" name="data_form" onsubmit="save(); return false">
     Title: <input type="text" value="" name="title" /><br />
