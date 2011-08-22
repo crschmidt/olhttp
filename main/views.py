@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 import django.contrib.gis.geos as geos
 from vectorformats.Formats import Django, GeoJSON
-from main.models import Properties
+from main.models import Properties, Paddocks
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 
@@ -11,6 +11,10 @@ import json
 MODELS = {
     'properties': {
         'modelclass': Properties,
+        'fields': ['name']
+    },
+    'paddocks': {
+        'modelclass': Paddocks,
         'fields': ['name']
     }
 }    
