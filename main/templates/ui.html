@@ -21,9 +21,7 @@
     var map = null;
     function init() {
         map = new OpenLayers.Map("map", {'theme': null});
-        var gmap = new OpenLayers.Layer.GoogleNG(
-                // ROADMAP, the default
-                    );
+        var gmap = new OpenLayers.Layer.GoogleNG({type: google.maps.MapTypeId.HYBRID});
         map.addLayer(gmap);
         map.zoomToMaxExtent();
         for (var key in LAYER_CONFIG) {
