@@ -1,6 +1,8 @@
 <html>
 <head>
-<script src="http://localhost/openlayers/OpenLayers.js"></script>
+<script src="http://openlayers.org/dev/OpenLayers.js"></script>
+<script src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
+<link rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" />
 <link rel="stylesheet" href="/static/css/style.css" />
 <script>
     LAYER_CONFIG = {
@@ -18,7 +20,10 @@
     currentFeature = null;
     function init() {
         var map = new OpenLayers.Map("map", {'theme': null});
-        map.addLayer(new OpenLayers.Layer("Base", {isBaseLayer: true}));
+        var gmap = new OpenLayers.Layer.GoogleNG(
+                // ROADMAP, the default
+                    );
+        map.addLayer(gmap);
         map.zoomToMaxExtent();
         for (var key in LAYER_CONFIG) {
             var layer_info = LAYER_CONFIG[key];
