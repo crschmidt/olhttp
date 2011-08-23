@@ -40,6 +40,9 @@
                 }),
                 layerKey: key
             }); 
+            if (LAYER_CONFIG[key].styleMap) {
+                layer.styleMap = LAYER_CONFIG[key].styleMap;
+            }    
             LAYER_CONFIG[key].layer = layer;
             map.addLayer(layer);
             layer.events.register('loadend', layer, register);
