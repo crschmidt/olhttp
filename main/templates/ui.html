@@ -1,22 +1,39 @@
+<!DOCTYPE HTML>
 <html>
 <head>
-<script src="http://openlayers.org/dev/OpenLayers.js"></script>
-<script src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
-<link rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" />
-<link rel="stylesheet" href="/static/css/style.css" />
+<script type="text/javascript"  src="http://openlayers.org/dev/OpenLayers.js"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
+
+ <script type="text/javascript" src="http://www.uvm.edu/~mhack/dom-drag.js"></script> 
+<!--
+<script type="text/javascript" src="http://www.uvm.edu/~mhack/jquery-ui-bill/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="http://www.uvm.edu/~mhack/jquery-ui-bill/js/jquery-ui-1.8.16.custom.min.js"></script>
+<link type="text/css" href="http://www.uvm.edu/~mhack/jquery-ui-bill/css/ui-lightness/jquery-ui-1.8.16.custom.css" rel="Stylesheet" />  -->
+
+<link type="text/css" rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" />
+<link type="text/css" rel="stylesheet" href="/static/css/style.css" />
 <script>
     LAYER_CONFIG = {
         'properties': {
             'title': 'Properties',
             'form': 'properties_form',
             'type': 'Polygon',
-	    'multi': true
+            'multi': true,
+            styleMap: new OpenLayers.StyleMap({'strokeColor': 'blue', 'strokeWidth': 2.2, 'fillOpacity': 0, 'strokeDashstyle': 'longdash', 'label': "${name}\n${acres} acres", 'labelAlign': "cc", 'fontColor': "#D6F21D", 'fontOpacity': 0.8, 'fontFamily': "Arial", 'fontSize': 14})
+        },
+        'cells': {
+            'title': 'Cells',
+            'form': 'properties_form',
+            'type': 'Polygon',
+            'multi': true
+            //styleMap: new OpenLayers.StyleMap({'strokeColor': 'yellow', 'strokeWidth': 1, 'fillColor': 'red', 'fillOpacity': 0})
         },
         'paddocks': {
             'title': 'Paddocks',
-            'form': 'properties_form',
+            'form': 'paddocks_form',
             'type': 'Polygon',
-	    'multi': true
+            'multi': true
+            //styleMap: new OpenLayers.StyleMap({'strokeColor': 'red', 'strokeWidth': 1, 'fillColor': 'blue', 'fillOpacity': 0.3})
         }
     };    
     currentFeature = null;
@@ -45,10 +62,10 @@
                     format: new OpenLayers.Format.GeoJSON()
                 }),
                 layerKey: key
-            }); 
+            });
             if (LAYER_CONFIG[key].styleMap) {
                 layer.styleMap = LAYER_CONFIG[key].styleMap;
-            }    
+            }   
             LAYER_CONFIG[key].layer = layer;
             map.addLayer(layer);
             layer.events.register('loadend', layer, register);
@@ -93,7 +110,9 @@
             document.getElementById(LAYER_CONFIG[key].form).parentNode.style.display = "none";
         }    
         document.getElementById(form).parentNode.style.display = "";
+
     }
+
     function save() {
         var layer = currentFeature.layer.layerKey;
         var form = LAYER_CONFIG[layer].form;
@@ -124,29 +143,60 @@
         });
     }
 </script>
+
+
 </head>
 <body onload="init()">
-<div id="featuredetails" style="float:right; width: 300px">
-</div>
-<div id="details" style="float:right; width: 300px; display:none;">
-  <form id="properties_form" name="properties_form" onsubmit="save(); return false">
-    Title: <input type="text" value="" name="name" /><br />
-    <input type="submit" value="Save" />
-  </form>
-</div>
-<div id="other_details" style="float:right; width: 300px; display:none;">
-  <form id="other_form" name="other_form" onsubmit="save(); return false">
-    Title: <input type="text" value="" name="title" /><br />
-    Description:<br />
-    <textarea name="description"></textarea>
-    <input type="submit" value="Save" />
-  </form>
-</div>
-<div id="map" style="width: 512px; height: 512px"></div><br />
 <div id="geocoder">
 <form name="geocoder" onsubmit="geocode(this); return false">
-<input type="text" name="search_text" value="San Francisco" />
-<input type="submit" value="Geocode" />
+<input type="text" name="search_text" value="Salina, KS" />
+<input type="submit" value="Zoom to Location" />
 </form>
+<div id="map" style="width: 100%; height: 512px; z-index:1; position:relative;"></div>
+</div>
+
+<div id="featuredetails" >
+
+<div id="details" style="display:none;">
+<span id="drag_handle1" class="drag_box_handle" >click here to move</span>
+  <form id="properties_form" name="properties_form" onsubmit="save(); return false">
+    Name/ID#: <input type="text" value="" name="name" /><br />
+    Info Links: <input type="text" value="http://" name="links" /><br />
+    Photo/Video Links: <input type="text" value="e.g. http://newsoilnet.ning.com/video/keyline-farming-1955" name="photo_vid_links" /><br />
+    Whole-Cell Monitoring -<br />
+    <i>Successes:</i> <input type="text" value="" name="wcm_success" /><br />
+    <i>Problems: </i><input type="text" value="" name="wcm_problem" /><br />
+    <i>Strategies:</i><input type="text" value="" name="wcm_plans" /><br />
+    General Notes:<br />
+    <textarea name="notes"></textarea>    
+    <input type="submit" value="Save" />
+  </form>
+</div>
+<div id="other_details" style= "display:none;">
+<span id="drag_handle2" class="drag_box_handle">click here to move</span>
+  <form id="paddocks_form" name="paddocks_form" onsubmit="save(); return false">
+    Name/ID#: <input type="text" value="" name="name" /><br />
+    Info Links: <input type="text" value="http://" name="links" /><br />
+    Photo/Video Links: <input type="text" value="e.g. http://newsoilnet.ning.com/video/keyline-farming-1955" name="photo_vid_links" /><br />
+    Paddock Monitoring -<br />
+    <i>Successes: </i><input type="text" value="" name="pm_success" /><br />
+    <i>Problems: </i><input type="text" value="" name="pm_problem" /><br />
+    <i>Strategies: </i><input type="text" value="" name="pm_plans" /><br />
+    General Notes:<br />
+    <textarea name="notes"></textarea>
+    <input type="submit" value="Save" />
+  </form>
+</div>
+
+</div>
+<!-- delete the following script to make cells and properties accept input -->
+<script type="text/javascript">
+var theHandle1 = document.getElementById("drag_handle1");
+var theRoot1 = document.getElementById("details");
+var theHandle2 = document.getElementById("drag_handle2");
+var theRoot2 = document.getElementById("other_details");
+Drag.init(theHandle2, theRoot2);
+Drag.init(theHandle1, theRoot1);
+</script>
 </body>
 </html>
