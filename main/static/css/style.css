@@ -42,3 +42,33 @@
 .myToolbar .olControlDrawFeaturePolygonItemActive {
     background-position: -26px -24px;
 }
+#details, #other_details{
+	background:#fff;
+	width:200px;
+	font-family:georgia, serif;
+	border:1px dotted #999;
+	padding:20px;
+	position:absolute;
+	margin-left:140px;
+	margin-top:100px;
+	z-index:2;
+	
+}
+.drag_box_handle{
+	width:200px !important;
+	margin:-10px -20px 10px -20px;
+	float:left;
+	font-size:.8em;
+	color:#ccc;
+	padding:4px 20px;
+	border-bottom:1px dotted #ccc;
+}
+#details textarea, #other_details textarea{
+	width:160px;
+	height:200px;
+}
+#details input{
+	clear:left;
+
+}
+
