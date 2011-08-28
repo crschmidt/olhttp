@@ -13,27 +13,29 @@
 <link type="text/css" rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" />
 <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
 <script>
+    var properties_style = {'strokeColor': 'blue', 'strokeWidth': 2.2, 'fillOpacity': 0, 'strokeDashstyle': 'longdash', 'label': "${name}\n${acres} acres", 'labelAlign': "cc", 'fontColor': "#D6F21D", 'fontOpacity': 0.8, 'fontFamily': "Arial", 'fontSize': 14};
+    var properties_sketch_style = OpenLayers.Util.applyDefaults({'label': null}, properties_style);
     LAYER_CONFIG = {
         'properties': {
             'title': 'Properties',
             'form': 'properties_form',
             'type': 'Polygon',
             'multi': true,
-            styleMap: new OpenLayers.StyleMap({'strokeColor': 'blue', 'strokeWidth': 2.2, 'fillOpacity': 0, 'strokeDashstyle': 'longdash', 'label': "${name}\n${acres} acres", 'labelAlign': "cc", 'fontColor': "#D6F21D", 'fontOpacity': 0.8, 'fontFamily': "Arial", 'fontSize': 14})
+            styleMap: new OpenLayers.StyleMap({'default': properties_style, 'sketch': properties_sketch_style, 'temporary': properties_sketch_style})
         },
         'cells': {
             'title': 'Cells',
             'form': 'properties_form',
             'type': 'Polygon',
-            'multi': true
-            //styleMap: new OpenLayers.StyleMap({'strokeColor': 'yellow', 'strokeWidth': 1, 'fillColor': 'red', 'fillOpacity': 0})
+            'multi': true,
+            styleMap: new OpenLayers.StyleMap({'strokeColor': 'yellow', 'strokeWidth': 1, 'fillColor': 'red', 'fillOpacity': 0.3})
         },
         'paddocks': {
             'title': 'Paddocks',
             'form': 'paddocks_form',
             'type': 'Polygon',
-            'multi': true
-            //styleMap: new OpenLayers.StyleMap({'strokeColor': 'red', 'strokeWidth': 1, 'fillColor': 'blue', 'fillOpacity': 0.3})
+            'multi': true,
+            styleMap: new OpenLayers.StyleMap({'strokeColor': 'red', 'strokeWidth': 1, 'fillColor': 'blue', 'fillOpacity': 0.3})
         }
     };    
     currentFeature = null;
