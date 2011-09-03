@@ -42,6 +42,12 @@
 .myToolbar .olControlDrawFeaturePolygonItemActive {
     background-position: -26px -24px;
 }
+.myToolbar .olControlModifyFeatureItemInactive {
+    background-position: -77px -1px;;
+}
+.myToolbar .olControlModifyFeatureItemActive {
+    background-position: -77px -24px;;
+}
 #details, #other_details{
 	background:#fff;
 	width:200px;
