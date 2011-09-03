@@ -119,6 +119,8 @@
             if (formdom[i].type == "submit") {continue;}
             if (currentFeature.attributes[formdom[i].name] != undefined) {
                 formdom[i].value = currentFeature.attributes[formdom[i].name] || "";
+            } else {
+                formdom[i].value = "";
             }    
         }
         for (var key in LAYER_CONFIG) {
