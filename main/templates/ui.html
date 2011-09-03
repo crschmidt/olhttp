@@ -13,15 +13,16 @@
 <link type="text/css" rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" />
 <link type="text/css" rel="stylesheet" href="/static/css/style.css" />
 <script>
-    var properties_style = {'strokeColor': 'blue', 'strokeWidth': 2.2, 'fillOpacity': 0, 'strokeDashstyle': 'longdash', 'label': "${name}\n${acres} acres", 'labelAlign': "cc", 'fontColor': "#D6F21D", 'fontOpacity': 0.8, 'fontFamily': "Arial", 'fontSize': 14};
-    var properties_sketch_style = OpenLayers.Util.applyDefaults({'label': null}, properties_style);
+    var properties_style = {'strokeColor': 'blue', 'strokeWidth': 2.2, 'fillOpacity': 0, 'strokeDashstyle': 'longdash', 'label': "${name}\n${acres} acres", 'labelAlign': "cc", 'fontColor': "#D6F21D", 'fontOpacity': 0.8, 'fontFamily': "Arial", 'fontSize': 14, 'pointRadius': 5};
+    var properties_sketch_style = OpenLayers.Util.applyDefaults({'label': null, 'fillColor': 'grey', 'strokeColor': 'red'}, properties_style);
     LAYER_CONFIG = {
         'properties': {
             'title': 'Properties',
             'form': 'properties_form',
             'type': 'Polygon',
             'multi': true,
-            styleMap: new OpenLayers.StyleMap({'default': properties_style, 'sketch': properties_sketch_style, 'temporary': properties_sketch_style})
+            'editable': true,
+            styleMap: new OpenLayers.StyleMap({'default': properties_style, 'temporary': properties_sketch_style, 'select': properties_sketch_style})
         },
         'cells': {
             'title': 'Cells',
@@ -83,9 +84,14 @@
                     var info = LAYER_CONFIG[layer];
                     this.addControls( [
                         new OpenLayers.Control.DrawFeature(info.layer, OpenLayers.Handler[info.type], {'displayClass': 'olControlDrawFeature'+info.type, 'title': LAYER_CONFIG[layer].title, multi: info.multi || false})
-                    ])
-                    this.displayClass = 'myToolbar';
+                    ]);
+                    if (info.editable) {
+                        this.addControls( [
+                            new OpenLayers.Control.ModifyFeature(info.layer, {vertexRenderIntent: 'temporary'})
+                        ]);
+                    }    
                 }
+                this.displayClass = 'myToolbar';
             },
             CLASS_NAME: 'MyToolbar'
         });
