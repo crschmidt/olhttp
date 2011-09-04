@@ -14,7 +14,8 @@
         'other': {
             'title': "Other",
             'form': 'other_form',
-            'type': 'Polygon'
+            'type': 'Polygon',
+            'editable': true
         }    
     };    
     currentFeature = null;
@@ -62,7 +63,12 @@
                     var info = LAYER_CONFIG[layer];
                     this.addControls( [
                         new OpenLayers.Control.DrawFeature(info.layer, OpenLayers.Handler[info.type], {'displayClass': 'olControlDrawFeature'+info.type, 'title': LAYER_CONFIG[layer].title})
-                    ])
+                    ]);
+                    if (info.editable) {
+                        this.addControls( [
+                            new OpenLayers.Control.ModifyFeature(info.layer, {vertexRenderIntent: 'temporary'})
+                        ]);
+                    }  
                     this.displayClass = 'myToolbar';
                 }
             },
@@ -73,25 +79,34 @@
     }
     function register() {
         this.events.register('featureadded', this, added);
+        this.events.register('beforefeaturemodified', this, added);
         this.events.unregister('loadend', this, register);
     }
     function added(evt) {
-        if (currentFeature) {
+       if (currentFeature && currentFeature.state == "Insert" && currentFeature != evt.feature) {
             currentFeature.layer.removeFeatures(currentFeature);
         }   
-        
-        currentFeature = evt.feature;
-        var form = LAYER_CONFIG[this.layerKey].form;
+        displayForm(evt.feature);
+    }
+
+    function displayForm(feature) {
+        currentFeature = feature;
+        var form = LAYER_CONFIG[feature.layer.layerKey].form;
         var formdom = document.forms[form];
         for (var i = 0; i < formdom.length; i++) {
             if (formdom[i].type == "submit") {continue;}
-            formdom[i].value = "";
+            if (currentFeature.attributes[formdom[i].name] != undefined) {
+                formdom[i].value = currentFeature.attributes[formdom[i].name] || "";
+            } else {
+                formdom[i].value = "";
+            }    
         }
         for (var key in LAYER_CONFIG) {
             document.getElementById(LAYER_CONFIG[key].form).parentNode.style.display = "none";
         }    
         document.getElementById(form).parentNode.style.display = "";
-    }
+            
+    }    
     function save() {
         var layer = currentFeature.layer.layerKey;
         var form = LAYER_CONFIG[layer].form;
