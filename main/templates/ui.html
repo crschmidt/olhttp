@@ -30,7 +30,7 @@
     }
     function init() {
         map = new OpenLayers.Map("map", {'theme': null});
-        var gmap = new OpenLayers.Layer.GoogleNG({type: google.maps.MapTypeId.HYBRID});
+        var gmap = new OpenLayers.Layer.Google("Hybrid", {type: google.maps.MapTypeId.HYBRID,numZoomLevels: 20});
         map.addLayer(gmap);
         map.zoomToMaxExtent();
         var layers = [];
