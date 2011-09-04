@@ -90,7 +90,8 @@
                         this.addControls( [
                             new OpenLayers.Control.ModifyFeature(info.layer, {vertexRenderIntent: 'temporary'})
                         ]);
-                    }    
+                    }  
+                    this.displayClass = 'myToolbar';
                 }
                 this.displayClass = 'myToolbar';
             },
@@ -105,9 +106,9 @@
         this.events.unregister('loadend', this, register);
     }
     function added(evt) {
-        if (currentFeature && currentFeature.state == "Insert" && currentFeature != evt.feature) {
+       if (currentFeature && currentFeature.state == "Insert" && currentFeature != evt.feature) {
             currentFeature.layer.removeFeatures(currentFeature);
-        }  
+        }   
         displayForm(evt.feature);
     }
 
@@ -128,7 +129,7 @@
         }    
         document.getElementById(form).parentNode.style.display = "";
             
-    }
+    }    
     function save() {
         var layer = currentFeature.layer.layerKey;
         var form = LAYER_CONFIG[layer].form;
