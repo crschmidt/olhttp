@@ -11,11 +11,11 @@ import json
 MODELS = {
     'data': {
         'modelclass': Data,
-        'fields': ['title', 'description']
+        'fields': ['title']
     },
     'other': {
         'modelclass': Other,
-        'fields': ['title', 'description']
+        'fields': ['title']
     }
 }    
 

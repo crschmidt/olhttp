@@ -28,7 +28,8 @@
     var map = null;
     function featureSelected(evt) {
         var type = evt.feature.layer.name;
-        var html = '<b>'+type+'</b><ul>';
+//        var html = '<b>'+type+'</b><ul>';
+        var html = '';
         for (var key in evt.feature.attributes) {
             html += '<li><b>'+ key + '</b>: ' + evt.feature.attributes[key]+"</li>";
         }
