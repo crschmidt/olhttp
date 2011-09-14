@@ -11,18 +11,21 @@
         'data': {
             'title': 'Base Data',
             'form': 'data_form',
-            'type': 'Point'
+            'type': 'Point',
+            'styleMap': new OpenLayers.StyleMap({'default': {'strokeColor': '#ff0000', 'fillColor': '#ffffff', 'fillOpacity': '0.5', 'strokeOpacity': '1.0', 'pointRadius': 12},
+                                                 'select': {'strokeColor': '#0000ff', 'fillColor': '#ffffff', 'fillOpacity': '0.5', 'strokeOpacity': '1.0', 'pointRadius': 12}})
         },
         'other': {
             'title': "Other",
             'form': 'other_form',
             'type': 'Polygon',
-            'editable': true
+            'editable': true,
+            'styleMap': new OpenLayers.StyleMap({'default': {'strokeColor': '#ff0000', 'fillColor': '#ffffff', 'fillOpacity': '0.5', 'strokeOpacity': '1.0', 'pointRadius': 12},
+                                                 'select': {'strokeColor': '#0000ff', 'fillColor': '#ffffff', 'fillOpacity': '0.5', 'strokeOpacity': '1.0', 'pointRadius': 12}})
         }    
     };    
     currentFeature = null;
     var map = null;
-    OpenLayers.Feature.Vector.style['default'].pointRadius = 12;
     function featureSelected(evt) {
         var type = evt.feature.layer.name;
         var html = '<b>'+type+'</b><ul>';
