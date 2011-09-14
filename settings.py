@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 
+import os
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 STATIC_ROOT = os.path.join(ROOT_PATH, "main/static")
 
