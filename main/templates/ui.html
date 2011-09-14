@@ -1,8 +1,10 @@
 <html>
 <head>
-<script src="http://openlayers.org/dev/OpenLayers.js"></script>
-<script src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>
+<script src="http://openlayers.org/api/2.11/OpenLayers.js"></script>
+<!--<script src="http://maps.google.com/maps/api/js?v=3.5&amp;sensor=false"></script>-->
+<link rel="stylesheet" href="http://openlayers.org/dev/examples/style.mobile.css" />
 <link rel="stylesheet" href="http://openlayers.org/dev/theme/default/style.css" />
+
 <link rel="stylesheet" href="/static/css/style.css" />
 <script>
     LAYER_CONFIG = {
@@ -29,10 +31,10 @@
         document.getElementById("featuredetails").innerHTML = html;
     }
     function init() {
-        map = new OpenLayers.Map("map", {'theme': null});
-        var gmap = new OpenLayers.Layer.Google("Hybrid", {type: google.maps.MapTypeId.HYBRID,numZoomLevels: 20});
+        map = new OpenLayers.Map("map", {'theme': null, 'controls':[new OpenLayers.Control.Navigation(), new OpenLayers.Control.ZoomPanel(), new OpenLayers.Control.Attribution()]});
+        var gmap = new OpenLayers.Layer.OSM(); //"Hybrid", {type: google.maps.MapTypeId.HYBRID,numZoomLevels: 20});
         map.addLayer(gmap);
-        map.zoomToMaxExtent();
+        map.zoomToExtent(new OpenLayers.Bounds(-11729873.484955,4795009.439204,-11635397.318007,4844005.574328));
         var layers = [];
         for (var key in LAYER_CONFIG) {
             var layer_info = LAYER_CONFIG[key];
@@ -139,29 +141,25 @@
 </script>
 </head>
 <body onload="init()">
-<div id="featuredetails" style="float:right; width: 300px">
+<div id="featuredetails" style="position: fixed; top: 10px; left: 80px; z-index: 10000; background-color: white;-webkit-border-radius: 3px; padding: 10px;">
 </div>
-<div id="details" style="float:right; width: 300px; display:none;">
+<div id="details" style="display:none; position: fixed; top: 10px; left: 80px; z-index: 10000; background-color: white;-webkit-border-radius: 3px; padding: 10px;">
   <form id="data_form" name="data_form" onsubmit="save(); return false">
     Title: <input type="text" value="" name="title" /><br />
-    Description:<br />
-    <textarea name="description"></textarea>
     <input type="submit" value="Save" />
   </form>
 </div>
-<div id="other_details" style="float:right; width: 300px; display:none;">
+<div id="other_details" style="display:none; position: fixed; top: 10px; left: 80px; z-index: 10000; background-color: white;-webkit-border-radius: 3px; padding: 10px;">
   <form id="other_form" name="other_form" onsubmit="save(); return false">
     Title: <input type="text" value="" name="title" /><br />
-    Description:<br />
-    <textarea name="description"></textarea>
     <input type="submit" value="Save" />
   </form>
 </div>
-<div id="map" style="width: 512px; height: 512px"></div><br />
-<div id="geocoder">
+<div id="map" style="width: 99%; height: 99%; position: fixed; top: 0px;"></div><br />
+<!--<div id="geocoder" style="position: fixed; bottom: 10px; background-color: white">
 <form name="geocoder" onsubmit="geocode(this); return false">
 <input type="text" name="search_text" value="San Francisco" />
 <input type="submit" value="Geocode" />
-</form>
+</form>-->
 </body>
 </html>
