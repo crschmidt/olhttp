@@ -22,6 +22,7 @@
     };    
     currentFeature = null;
     var map = null;
+    OpenLayers.Feature.Vector.style['default'].pointRadius = 12;
     function featureSelected(evt) {
         var type = evt.feature.layer.name;
         var html = '<b>'+type+'</b><ul>';
