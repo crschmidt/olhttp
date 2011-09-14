@@ -123,6 +123,9 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 
+ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+STATIC_ROOT = os.path.join(ROOT_PATH, "main/static")
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error.
