@@ -76,11 +76,11 @@ STATICFILES_DIRS = (
 
 # List of finder classes that know how to find static files in
 # various locations.
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
-)
+#STATICFILES_FINDERS = (
+#    'django.contrib.staticfiles.finders.FileSystemFinder',
+#    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+##    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+#)
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '*1ol5$*#9)uz9ddhtuqb%21ie6(92&g26%j0g$+cw_k!zr@sjy'
@@ -114,7 +114,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+#    'django.contrib.staticfiles',
     'django.contrib.gis',
     'main',
     # Uncomment the next line to enable the admin:
@@ -123,9 +123,9 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 
-import os
-ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
-STATIC_ROOT = os.path.join(ROOT_PATH, "main/static")
+#import os
+#ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+#STATIC_ROOT = os.path.join(ROOT_PATH, "main/static")
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
