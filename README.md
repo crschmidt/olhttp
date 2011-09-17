@@ -15,3 +15,5 @@ You can sketch, edit, and save to your heart's content.
 
 UI is easily configurable for more/different layers, using
 LAYER_CONFIG in javascript and MODELS in main/views.py.
+
+Demo at http://olhttp.djangozoom.net/
